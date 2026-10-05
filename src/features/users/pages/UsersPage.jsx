@@ -1,24 +1,40 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IconSearch, IconUsers, IconMail, IconLoader2 } from "@tabler/icons-react";
-import { asyncGetUsers } from "../states/action";
+import { asyncSetUsers } from "../states/action";
+import { formatDate } from "../../../helpers/toolsHelper";
+import {
+  IconUsers,
+  IconSearch,
+  IconMail,
+  IconCalendar,
+  IconLoader2,
+} from "@tabler/icons-react";
+
+const EMPTY_USERS = [];
 
 function UsersPage() {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users);
-  const loadingUsers = useSelector((state) => state.loadingUsers);
-
+  const users = useSelector((state) => state.users ?? EMPTY_USERS);
+  const [loadingUsers, setLoadingUsers] = useState(false);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    dispatch(asyncGetUsers());
+    let isMounted = true;
+    setLoadingUsers(true);
+    Promise.resolve(dispatch(asyncSetUsers())).finally(() => {
+      if (isMounted) setLoadingUsers(false);
+    });
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch]);
 
-  const filteredUsers = (users || []).filter((u) => {
-    const keyword = search.toLowerCase();
+  const filteredUsers = users.filter((u) => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
     return (
-      u.name?.toLowerCase().includes(keyword) ||
-      u.email?.toLowerCase().includes(keyword)
+      (u.name && u.name.toLowerCase().includes(q)) ||
+      (u.email && u.email.toLowerCase().includes(q))
     );
   });
 
@@ -90,7 +106,7 @@ function UsersPage() {
                   )}
 
                   <div className="min-w-0 flex-1">
-                    {/* PERBAIKAN: h3 → h2 agar heading order valid */}
+                    {/* PERBAIKAN Axe: h3 → h2 (heading order) */}
                     <h2 className="font-bold text-slate-900 truncate text-base">
                       {u.name}
                     </h2>
@@ -104,7 +120,8 @@ function UsersPage() {
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                   <span className="font-mono font-semibold">ID: #{u.id}</span>
                   <span className="flex items-center gap-1">
-                    {/* jika ada field tambahan di original, biarkan sesuai original */}
+                    <IconCalendar size={13} />
+                    {formatDate(u.created_at)}
                   </span>
                 </div>
               </div>
