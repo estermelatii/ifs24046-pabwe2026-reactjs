@@ -30,7 +30,6 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
 
   return (
     <>
-      {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div
           data-testid="sidebar-backdrop"
@@ -49,10 +48,10 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
         <div className="flex flex-col h-full justify-between">
           <div className="space-y-6">
             <div>
-              <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+              {/* FIX contrast: slate-400 → slate-600 */}
+              <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-600">
                 Menu Utama
               </p>
-              {/* aria-label unik untuk landmark nav */}
               <nav className="mt-3 space-y-1" aria-label="Menu utama">
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -78,7 +77,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
                               className={
                                 isActive
                                   ? "text-white"
-                                  : "text-slate-400 group-hover:text-slate-600"
+                                  : "text-slate-500 group-hover:text-slate-700"
                               }
                             />
                             <span>{item.label}</span>
