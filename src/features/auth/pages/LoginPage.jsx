@@ -111,6 +111,7 @@ function LoginPage() {
       <div className="pt-2">
         <button
           type="submit"
+          id="login-submit-button"
           data-testid="login-submit-button"
           disabled={loading}
           className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-indigo-700 hover:bg-indigo-800 active:bg-indigo-900 rounded-xl shadow-md shadow-indigo-600/25 transition-all disabled:opacity-60"
