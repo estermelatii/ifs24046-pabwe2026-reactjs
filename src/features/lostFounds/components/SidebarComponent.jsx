@@ -36,6 +36,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
           data-testid="sidebar-backdrop"
           onClick={onCloseMobile}
           className="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-xs md:hidden"
+          aria-hidden="true"
         />
       )}
 
@@ -43,6 +44,7 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
         className={`fixed top-16 bottom-0 left-0 z-30 w-64 bg-white border-r border-slate-200/80 p-4 transition-transform duration-200 ease-in-out md:translate-x-0 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        aria-label="Navigasi samping"
       >
         <div className="flex flex-col h-full justify-between">
           <div className="space-y-6">
@@ -50,7 +52,8 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
               <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-400">
                 Menu Utama
               </p>
-              <nav className="mt-3 space-y-1">
+              {/* aria-label unik untuk landmark nav */}
+              <nav className="mt-3 space-y-1" aria-label="Menu utama">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -90,7 +93,6 @@ function SidebarComponent({ isSidebarOpen, onCloseMobile }) {
             </div>
           </div>
 
-          {/* Footer note in sidebar */}
           <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100/60">
             <p className="text-xs font-semibold text-indigo-900">
               Praktikum 4 PABWE

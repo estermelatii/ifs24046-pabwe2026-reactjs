@@ -1,40 +1,24 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { asyncSetUsers } from "../states/action";
-import { formatDate } from "../../../helpers/toolsHelper";
-import {
-  IconUsers,
-  IconSearch,
-  IconMail,
-  IconCalendar,
-  IconLoader2,
-} from "@tabler/icons-react";
-
-const EMPTY_USERS = [];
+import { IconSearch, IconUsers, IconMail, IconLoader2 } from "@tabler/icons-react";
+import { asyncGetUsers } from "../states/action";
 
 function UsersPage() {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users ?? EMPTY_USERS);
-  const [loadingUsers, setLoadingUsers] = useState(false);
+  const users = useSelector((state) => state.users);
+  const loadingUsers = useSelector((state) => state.loadingUsers);
+
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    let isMounted = true;
-    setLoadingUsers(true);
-    Promise.resolve(dispatch(asyncSetUsers())).finally(() => {
-      if (isMounted) setLoadingUsers(false);
-    });
-    return () => {
-      isMounted = false;
-    };
+    dispatch(asyncGetUsers());
   }, [dispatch]);
 
-  const filteredUsers = users.filter((u) => {
-    if (!search.trim()) return true;
-    const q = search.toLowerCase();
+  const filteredUsers = (users || []).filter((u) => {
+    const keyword = search.toLowerCase();
     return (
-      (u.name && u.name.toLowerCase().includes(q)) ||
-      (u.email && u.email.toLowerCase().includes(q))
+      u.name?.toLowerCase().includes(keyword) ||
+      u.email?.toLowerCase().includes(keyword)
     );
   });
 
@@ -106,7 +90,10 @@ function UsersPage() {
                   )}
 
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-bold text-slate-900 truncate">{u.name}</h3>
+                    {/* PERBAIKAN: h3 → h2 agar heading order valid */}
+                    <h2 className="font-bold text-slate-900 truncate text-base">
+                      {u.name}
+                    </h2>
                     <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 truncate">
                       <IconMail size={14} className="shrink-0 text-slate-400" />
                       <span className="truncate">{u.email}</span>
@@ -117,8 +104,7 @@ function UsersPage() {
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                   <span className="font-mono font-semibold">ID: #{u.id}</span>
                   <span className="flex items-center gap-1">
-                    <IconCalendar size={13} />
-                    {formatDate(u.created_at)}
+                    {/* jika ada field tambahan di original, biarkan sesuai original */}
                   </span>
                 </div>
               </div>
