@@ -62,7 +62,9 @@ function DetailPage() {
   }
 
   async function handleDelete() {
-    const result = await showConfirmDialog("Apakah Anda yakin ingin menghapus todo ini?");
+    const result = await showConfirmDialog(
+      "Apakah Anda yakin ingin menghapus todo ini?"
+    );
     if (result.isConfirmed) {
       dispatch(asyncSetIsTodoDelete(todo.id));
     }
@@ -128,7 +130,8 @@ function DetailPage() {
         <div className="p-6 sm:p-8 space-y-6">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs font-bold text-slate-400">
+              {/* FIX contrast: slate-400 → slate-600 */}
+              <span className="font-mono text-xs font-bold text-slate-600">
                 #{todo.id}
               </span>
               {todo.is_completed ? (
@@ -148,14 +151,25 @@ function DetailPage() {
               {todo.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
+            {/* FIX contrast: slate-400 → slate-600, slate-500 → slate-700 */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
               <div className="flex items-center gap-1.5">
                 <IconCalendar size={14} className="shrink-0" />
-                <span>Dibuat: <strong className="text-slate-500">{formatDate(todo.created_at)}</strong></span>
+                <span>
+                  Dibuat:{" "}
+                  <strong className="text-slate-700">
+                    {formatDate(todo.created_at)}
+                  </strong>
+                </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <IconCalendar size={14} className="shrink-0" />
-                <span>Diperbarui: <strong className="text-slate-500">{formatDate(todo.updated_at)}</strong></span>
+                <span>
+                  Diperbarui:{" "}
+                  <strong className="text-slate-700">
+                    {formatDate(todo.updated_at)}
+                  </strong>
+                </span>
               </div>
             </div>
           </div>
