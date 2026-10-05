@@ -19,7 +19,6 @@ function LoginPage() {
   const [email, onEmailChange] = useInput("");
   const [password, onPasswordChange] = useInput("");
 
-  // 1. Periksa apakah login berhasil
   useEffect(() => {
     if (isAuthLogin === true) {
       const authToken = apiHelper.getAccessToken();
@@ -32,7 +31,6 @@ function LoginPage() {
     }
   }, [isAuthLogin, dispatch]);
 
-  // 2. Jika profile selesai di-fetch atau gagal
   useEffect(() => {
     if (isProfile) {
       setLoading(false);
@@ -55,15 +53,19 @@ function LoginPage() {
   }
 
   return (
-    <form onSubmit={onSubmitHandler} className="space-y-4">
+    <form onSubmit={onSubmitHandler} className="space-y-4" aria-label="Form login">
       <div>
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+        <label
+          htmlFor="login-email-input"
+          className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+        >
           Alamat Email
         </label>
         <div className="relative">
           <IconMail
             size={18}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"
+            aria-hidden="true"
           />
           <input
             type="email"
@@ -72,20 +74,25 @@ function LoginPage() {
             value={email}
             onChange={onEmailChange}
             placeholder="nama@email.com"
-            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+            autoComplete="email"
+            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
             required
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+        <label
+          htmlFor="login-password-input"
+          className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
+        >
           Kata Sandi
         </label>
         <div className="relative">
           <IconLock
             size={18}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"
+            aria-hidden="true"
           />
           <input
             type="password"
@@ -94,7 +101,8 @@ function LoginPage() {
             value={password}
             onChange={onPasswordChange}
             placeholder="••••••••"
-            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+            autoComplete="current-password"
+            className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
             required
           />
         </div>
@@ -103,19 +111,18 @@ function LoginPage() {
       <div className="pt-2">
         <button
           type="submit"
-          id="login-submit-button"
           data-testid="login-submit-button"
           disabled={loading}
-          className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl shadow-md shadow-indigo-600/25 transition-all disabled:opacity-60"
+          className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-indigo-700 hover:bg-indigo-800 active:bg-indigo-900 rounded-xl shadow-md shadow-indigo-600/25 transition-all disabled:opacity-60"
         >
           {loading ? (
             <>
-              <IconLoader2 size={18} className="animate-spin" />
-              <span>Sedang Masuk...</span>
+              <IconLoader2 size={18} className="animate-spin" aria-hidden="true" />
+              <span>Memproses...</span>
             </>
           ) : (
             <>
-              <IconLogin size={18} stroke={2.5} />
+              <IconLogin size={18} stroke={2.5} aria-hidden="true" />
               <span>Masuk Sekarang</span>
             </>
           )}

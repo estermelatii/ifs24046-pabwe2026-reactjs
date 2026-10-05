@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import apiHelper from "../../../helpers/apiHelper";
 import { asyncSetProfile, setIsProfile } from "../../users/states/action";
-import { asyncSetIsAuthLogout, setIsAuthLogoutActionCreator } from "../../auth/states/action";
+import {
+  asyncSetIsAuthLogout,
+  setIsAuthLogoutActionCreator,
+} from "../../auth/states/action";
 import NavbarComponent from "../components/NavbarComponent";
 import SidebarComponent from "../components/SidebarComponent";
 
@@ -17,7 +20,6 @@ function LostFoundLayout() {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // 1. Jalankan sekali untuk mengecek apakah pengguna sudah login
   useEffect(() => {
     const authToken = apiHelper.getAccessToken();
     if (authToken) {
@@ -27,7 +29,6 @@ function LostFoundLayout() {
     }
   }, [dispatch, navigate]);
 
-  // 2. Jika proses pengambilan profil selesai dan tidak ada profile, arahkan ke login
   useEffect(() => {
     if (isProfile) {
       dispatch(setIsProfile(false));
@@ -38,7 +39,6 @@ function LostFoundLayout() {
     }
   }, [isProfile, profile, dispatch, navigate]);
 
-  // 3. Efek setelah logout
   useEffect(() => {
     if (isAuthLogout) {
       dispatch(setIsAuthLogoutActionCreator(false));
@@ -52,28 +52,36 @@ function LostFoundLayout() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <main className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm font-medium text-slate-600">Memuat sesi pengguna...</p>
+          <div
+            className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"
+            role="status"
+            aria-label="Memuat"
+          />
+          <p className="text-sm font-medium text-slate-700">Memuat sesi pengguna...</p>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
-      <NavbarComponent
-        profile={profile}
-        handleLogout={handleLogout}
-        onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
-        isSidebarOpen={isSidebarOpen}
-      />
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <header>
+        <NavbarComponent
+          profile={profile}
+          handleLogout={handleLogout}
+          onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
+          isSidebarOpen={isSidebarOpen}
+        />
+      </header>
 
-      <SidebarComponent
-        isSidebarOpen={isSidebarOpen}
-        onCloseMobile={() => setIsSidebarOpen(false)}
-      />
+      <nav aria-label="Menu utama">
+        <SidebarComponent
+          isSidebarOpen={isSidebarOpen}
+          onCloseMobile={() => setIsSidebarOpen(false)}
+        />
+      </nav>
 
       <main className="pt-16 md:pl-64 transition-all">
         <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
