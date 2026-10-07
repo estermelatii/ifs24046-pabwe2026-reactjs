@@ -38,7 +38,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.postLostFound("", "")).rejects.toThrow("Gagal menambahkan todo");
+      await expect(lostFoundApi.postLostFound("", "")).rejects.toThrow(
+        "Gagal menambahkan laporan"
+      );
     });
   });
 
@@ -106,7 +108,7 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      const msg = await lostFoundApi.putLostFound(1, "Updated", "Desc", true);
+      const msg = await lostFoundApi.putLostFound(1, "Updated", "Desc", "lost", true);
       expect(msg).toBe("Berhasil mengubah data");
     });
 
@@ -118,7 +120,7 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      const msg = await lostFoundApi.putLostFound(1, "Updated", "Desc", false);
+      const msg = await lostFoundApi.putLostFound(1, "Updated", "Desc", "lost", false);
       expect(msg).toBe("Berhasil mengubah data");
     });
 
@@ -130,7 +132,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.putLostFound(1, "", "", false)).rejects.toThrow("Gagal update todo");
+      await expect(
+        lostFoundApi.putLostFound(1, "", "", "lost", false)
+      ).rejects.toThrow("Gagal update todo");
     });
 
     it("should use fallback error message when missing", async () => {
@@ -140,7 +144,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.putLostFound(1, "", "", false)).rejects.toThrow("Gagal mengubah todo");
+      await expect(
+        lostFoundApi.putLostFound(1, "", "", "lost", false)
+      ).rejects.toThrow("Gagal mengubah laporan");
     });
   });
 
@@ -150,7 +156,7 @@ describe("lostFoundApi", () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
         json: async () => ({
           status: "success",
-          data: { todos: mockTodos },
+          data: { lost_founds: mockTodos },
         }),
       });
 
@@ -163,11 +169,11 @@ describe("lostFoundApi", () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
         json: async () => ({
           status: "success",
-          data: { todos: mockTodos },
+          data: { lost_founds: mockTodos },
         }),
       });
 
-      const todos = await lostFoundApi.getLostFounds("1");
+      const todos = await lostFoundApi.getLostFounds({ is_completed: "1" });
       expect(todos).toEqual(mockTodos);
     });
 
@@ -201,7 +207,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.getLostFounds()).rejects.toThrow("Gagal mengambil data todo");
+      await expect(lostFoundApi.getLostFounds()).rejects.toThrow(
+        "Gagal mengambil data laporan"
+      );
     });
   });
 
@@ -211,7 +219,7 @@ describe("lostFoundApi", () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
         json: async () => ({
           status: "success",
-          data: { todo: mockTodo },
+          data: { lost_found: mockTodo },
         }),
       });
 
@@ -237,7 +245,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.getLostFoundById(999)).rejects.toThrow("Gagal mengambil detail todo");
+      await expect(lostFoundApi.getLostFoundById(999)).rejects.toThrow(
+        "Gagal mengambil detail laporan"
+      );
     });
   });
 
@@ -272,7 +282,9 @@ describe("lostFoundApi", () => {
         }),
       });
 
-      await expect(lostFoundApi.deleteLostFound(1)).rejects.toThrow("Gagal menghapus todo");
+      await expect(lostFoundApi.deleteLostFound(1)).rejects.toThrow(
+        "Gagal menghapus laporan"
+      );
     });
   });
 });

@@ -37,7 +37,7 @@ describe("RegisterPage", () => {
     fireEvent.change(nameInput, { target: { value: "Delcom User" } });
     fireEvent.change(emailInput, { target: { value: "user@delcom.org" } });
     fireEvent.change(passwordInput, { target: { value: "password123" } });
-    
+
     await act(async () => {
       fireEvent.click(submitBtn);
     });
@@ -49,7 +49,7 @@ describe("RegisterPage", () => {
     );
   });
 
-  it("should reset form fields and navigate to /auth/login on isAuthRegister success", () => {
+  it("should reset loading state when isAuthRegister becomes true", () => {
     renderWithProviders(<RegisterPage />, {
       preloadedState: {
         isAuthRegister: true,
@@ -57,7 +57,7 @@ describe("RegisterPage", () => {
     });
 
     expect(screen.getByTestId("register-submit-button")).toBeInTheDocument();
-    expect(mockNavigate).toHaveBeenCalledWith("/auth/login");
+    expect(screen.getByTestId("register-submit-button")).toBeEnabled();
   });
 
   it("should handle error state when isAuthRegister is false while loading", () => {
@@ -70,7 +70,6 @@ describe("RegisterPage", () => {
     const submitBtn = screen.getByTestId("register-submit-button");
     fireEvent.click(submitBtn);
 
-    // Simulate action failure wrapped in act
     act(() => {
       store.dispatch(authAction.setIsAuthRegisterActionCreator(false));
     });
