@@ -49,16 +49,15 @@ describe("RegisterPage", () => {
     );
   });
 
-   it("should reset loading state when isAuthRegister becomes true", () => {
+  it("should reset form fields and navigate to /auth/login on isAuthRegister success", () => {
     renderWithProviders(<RegisterPage />, {
       preloadedState: {
         isAuthRegister: true,
       },
     });
 
-    // Component only resets loading flag; navigation is handled elsewhere (or not at all)
     expect(screen.getByTestId("register-submit-button")).toBeInTheDocument();
-    expect(screen.getByTestId("register-submit-button")).toBeEnabled();
+    expect(mockNavigate).toHaveBeenCalledWith("/auth/login");
   });
 
   it("should handle error state when isAuthRegister is false while loading", () => {

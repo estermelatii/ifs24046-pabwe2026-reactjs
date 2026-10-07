@@ -60,11 +60,7 @@ describe("AddModal", () => {
     const form = screen.getByTestId("add-todo-modal").querySelector("form");
     fireEvent.submit(form);
 
-    expect(asyncAddSpy).toHaveBeenCalledWith(
-      "Belajar Vitest",
-      "Belajar sampai coverage 100%",
-      "lost"
-    );
+    expect(asyncAddSpy).toHaveBeenCalledWith("Belajar Vitest", "Belajar sampai coverage 100%");
 
     // Simulate completion from store
     renderWithProviders(<AddModal show={true} onClose={onClose} />, {
