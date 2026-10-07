@@ -129,6 +129,18 @@ describe("todos action", () => {
       expect(dispatch).toHaveBeenCalledWith(setIsTodoAddActionCreator(true));
     });
 
+    it("should use default status lost when status is falsy", async () => {
+      const dispatch = vi.fn();
+      const postSpy = vi.spyOn(lostFoundApi, "postLostFound").mockResolvedValue({});
+      vi.spyOn(toolsHelper, "showSuccessDialog").mockImplementation(() => {});
+
+      await asyncSetIsTodoAdd("Title", "Desc", "")(dispatch);
+
+      expect(postSpy).toHaveBeenCalledWith("Title", "Desc", "lost");
+      expect(dispatch).toHaveBeenCalledWith(setIsTodoAddedActionCreator(true));
+      expect(dispatch).toHaveBeenCalledWith(setIsTodoAddActionCreator(true));
+    });
+
     it("should show error dialog and dispatch false on failure", async () => {
       const dispatch = vi.fn();
       vi.spyOn(lostFoundApi, "postLostFound").mockRejectedValue(new Error("Gagal tambah"));

@@ -177,6 +177,19 @@ describe("lostFoundApi", () => {
       expect(todos).toEqual(mockTodos);
     });
 
+    it("should fetch with status filter when status parameter provided", async () => {
+      const mockTodos = [{ id: 3, title: "Lost item", status: "lost" }];
+      vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        json: async () => ({
+          status: "success",
+          data: { lost_founds: mockTodos },
+        }),
+      });
+
+      const todos = await lostFoundApi.getLostFounds({ status: "lost" });
+      expect(todos).toEqual(mockTodos);
+    });
+
     it("should return empty array if data.todos is missing", async () => {
       vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
         json: async () => ({
@@ -224,6 +237,19 @@ describe("lostFoundApi", () => {
       });
 
       const res = await lostFoundApi.getLostFoundById(5);
+      expect(res).toEqual(mockTodo);
+    });
+
+    it("should return result.data when lost_found key is missing", async () => {
+      const mockTodo = { id: 7, title: "Fallback data" };
+      vi.spyOn(apiHelper, "fetchData").mockResolvedValue({
+        json: async () => ({
+          status: "success",
+          data: mockTodo,
+        }),
+      });
+
+      const res = await lostFoundApi.getLostFoundById(7);
       expect(res).toEqual(mockTodo);
     });
 

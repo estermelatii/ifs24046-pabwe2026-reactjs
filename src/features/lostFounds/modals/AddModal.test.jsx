@@ -66,7 +66,6 @@ describe("AddModal", () => {
       "lost"
     );
 
-    // Simulate completion from store
     renderWithProviders(<AddModal show={true} onClose={onClose} />, {
       preloadedState: {
         isTodoAdd: true,
@@ -75,6 +74,30 @@ describe("AddModal", () => {
     });
 
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it("should update status when status select is changed", () => {
+    const asyncAddSpy = vi.spyOn(todoAction, "asyncSetIsTodoAdd").mockReturnValue(() => {});
+
+    renderWithProviders(<AddModal show={true} onClose={vi.fn()} />, {
+      preloadedState: {
+        isTodoAdd: false,
+        isTodoAdded: false,
+      },
+    });
+
+    const statusSelect = screen.getByTestId("status-select");
+    fireEvent.change(statusSelect, { target: { value: "found" } });
+
+    const titleInput = screen.getByTestId("add-todo-title-input");
+    const descInput = screen.getByTestId("add-todo-description-input");
+    fireEvent.change(titleInput, { target: { value: "Barang Hilang" } });
+    fireEvent.change(descInput, { target: { value: "Dompet di kampus" } });
+
+    const form = screen.getByTestId("add-todo-modal").querySelector("form");
+    fireEvent.submit(form);
+
+    expect(asyncAddSpy).toHaveBeenCalledWith("Barang Hilang", "Dompet di kampus", "found");
   });
 
   it("should handle isTodoAdd true when isTodoAdded is false", () => {
