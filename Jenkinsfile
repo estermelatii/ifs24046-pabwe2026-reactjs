@@ -500,7 +500,7 @@ pipeline {
             echo "=========================================="
             echo "Result: ${currentBuild.currentResult}"
             echo "Periksa log stage yang merah / Console Output untuk penyebab gagal."
-        }
+        } 
 
         unstable {
             echo "=========================================="
